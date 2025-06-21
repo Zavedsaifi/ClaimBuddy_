@@ -1,0 +1,114 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient List</title>
+  <!-- Stisla & Bootstrap CSS -->
+  <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/components.css' %}">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+  <style>
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+  <div class="main-wrapper">
+    <div class="navbar-bg"></div>
+    <nav class="navbar navbar-expand-lg main-navbar">
+      <a class="navbar-brand" href="#">ClaimBuddy</a>
+      <ul class="navbar-nav navbar-right ml-auto">
+        <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-user"></i></a></li>
+      </ul>
+    </nav>
+    <div class="main-sidebar sidebar-style-2">
+      <aside id="sidebar-wrapper">
+        <div class="sidebar-brand">
+          <a href="#">ClaimBuddy</a>
+        </div>
+        <ul class="sidebar-menu">
+          <li class="menu-header">Dashboard</li>
+          <li class="active"><a class="nav-link" href="#"><i class="fas fa-users"></i> <span>Patients</span></a></li>
+        </ul>
+      </aside>
+    </div>
+    <div class="main-content">
+      <section class="section">
+        <div class="section-header">
+          <h1>Patient List</h1>
+        </div>
+        <div class="section-body">
+          <div class="card">
+            <div class="card-header">
+              <h4>All Patients</h4>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped" id="patient-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Avatar</th>
+                      <th>Full Name</th>
+                      <th>Age</th>
+                      <th>Gender</th>
+                      <th>Insurance Provider</th>
+                      <th>Policy Number</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                    {% for patient in patients %}
+                    <tr>
+                      <td>{{ forloop.counter }}</td>
+                      <td><img src="{% static 'assets/img/avatar/avatar-' %}{{ forloop.counter|add:'0'|slice:'-1'|add:'1' }}.png" class="avatar" alt="avatar"></td>
+                      <td>{{ patient.full_name }}</td>
+                      <td>{{ patient.age }}</td>
+                      <td>
+                        {% if patient.gender == 'M' %}
+                          <span class="badge badge-primary">Male</span>
+                        {% elif patient.gender == 'F' %}
+                          <span class="badge badge-pink">Female</span>
+                        {% else %}
+                          <span class="badge badge-info">Other</span>
+                        {% endif %}
+                      </td>
+                      <td>{{ patient.insurance_provider }}</td>
+                      <td>{{ patient.policy_number }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="7">No patients found.</td></tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+  <!-- JS Scripts -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+  <script src="{% static 'assets/js/stisla.js' %}"></script>
+  <script>
+    $(document).ready(function() {
+      $('#patient-table').DataTable({
+      
+        "paging": false,
+        "info": false,
+        "searching": false
+      });
+    });
+  </script>
+</body>
+</html>
